@@ -12,10 +12,12 @@ import uz.taskmanagementsystem.model.Task;
 import uz.taskmanagementsystem.model.User;
 import uz.taskmanagementsystem.model.enums.TaskStatus;
 import uz.taskmanagementsystem.model.enums.TaskPriority;
+import uz.taskmanagementsystem.model.record.TaskRecord;
 import uz.taskmanagementsystem.repository.TaskRepository;
 import uz.taskmanagementsystem.repository.UserRepository;
 import uz.taskmanagementsystem.service.TaskService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -31,7 +33,25 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task createTask(Task task) {
+    public Task createTask(TaskRecord taskRecord) {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        User assignee = null;
+        if (taskRecord.assigneeId() != null) {
+            assignee = userRepository.findById(taskRecord.assigneeId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Assignee not found with id: " + taskRecord.assigneeId()));
+        }
+
+        Task task = Task.builder()
+                .title(taskRecord.title())
+                .description(taskRecord.description())
+                .status(taskRecord.status())
+                .priority(taskRecord.priority())
+                .author(currentUser)
+                .assignee(assignee)
+                .createdAt(LocalDateTime.now())
+                .build();
+
         return taskRepository.save(task);
     }
 
