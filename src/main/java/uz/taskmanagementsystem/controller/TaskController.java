@@ -12,6 +12,7 @@ import uz.taskmanagementsystem.model.Comment;
 import uz.taskmanagementsystem.model.Task;
 import uz.taskmanagementsystem.model.enums.TaskStatus;
 import uz.taskmanagementsystem.model.enums.TaskPriority;
+import uz.taskmanagementsystem.model.record.TaskRecord;
 import uz.taskmanagementsystem.service.impl.TaskServiceImpl;
 
 import java.util.List;
@@ -30,8 +31,8 @@ public class TaskController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Create a new task", description = "Allows admins to create a new task")
-    public ResponseEntity<Task> createTask(@Valid @RequestBody Task task) {
-        Task createdTask = taskServiceImpl.createTask(task);
+    public ResponseEntity<Task> createTask(@Valid @RequestBody TaskRecord taskRecord) {
+        Task createdTask = taskServiceImpl.createTask(taskRecord);
         return ResponseEntity.ok(createdTask);
     }
 

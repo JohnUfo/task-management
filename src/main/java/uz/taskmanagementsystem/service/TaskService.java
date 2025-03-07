@@ -4,14 +4,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.taskmanagementsystem.model.Comment;
 import uz.taskmanagementsystem.model.Task;
-import uz.taskmanagementsystem.model.enums.TaskStatus;
 import uz.taskmanagementsystem.model.enums.TaskPriority;
+import uz.taskmanagementsystem.model.enums.TaskStatus;
+import uz.taskmanagementsystem.model.record.TaskRecord;
 
 import java.util.List;
 
 public interface TaskService {
 
-    Task createTask(Task task);
+    Task createTask(TaskRecord taskRecord);
     Task updateTask(Long id, Task task);
     void deleteTask(Long id);
     Task updateTaskStatus(Long id, TaskStatus status);
